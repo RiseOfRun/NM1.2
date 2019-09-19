@@ -54,11 +54,31 @@ class System
 
 	void findY()
 	{
-		for (int i = 0; i < n; i++)
+		for (int i = 0; i < A.n; i++)
 		{
-
+			double sum = 0;
+			for (int j = i-A.k; j<i; j++)
+			{
+				if (j < 0) continue;
+				sum += L(i, j)*y[j];
+			}
+			y[i] = b[i] - sum;
 		}
 	}
+
+	void findX()
+	{
+		x[A.n - 1] = y[A.n - 1] / U(A.n, A.n);
+		for (int i = A.n-2; i >=0 ; i--)
+		{
+			for (int j =i-A.k; j<i; j++)
+			{
+				U(j, i) = U(j, i)*y[j] + U(j, i + 1);
+			}
+			x[i] = (y[i] - U(i, i + 1)) / U(i, i);
+		}
+	}
+
 };
 
 class Matrix
