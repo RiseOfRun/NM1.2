@@ -32,16 +32,21 @@ class System
 		{
 			for (int j = i - A.k; j <= i; j++)
 			{
+				if (j<0)
+				{
+					j = 0;
+				}
 				double sumL = 0;
 				double sumU = 0;
 
-				for (int k = i - A.k; k < i; k++)
+				for (int k = i-A.k; k < j; k++)
 				{
-					sumU += L(j, k)*U(k, i);
-				}
-				for (int k = i - A.k; k < j; k++)
-				{
-					sumL += L(i, k)*U(k, j);
+					if (k<0)
+					{
+						k = 0;
+					}
+					sumL = L(i, k)*U(k, j);
+					sumU = L(j, k)*U(k, i);
 				}
 
 				U(j, i) = A(j, i) - sumU;
@@ -125,6 +130,18 @@ public:
 		}
 	}
 
+	~Matrix()
+	{
+		for (int i = 0; i < n; i++)
+		{
+			delete al[i];
+			delete au[i];
+		}
+		delete di;
+		delete al;
+		delete au;
+	}
+
 
 	form & operator ()(const int &i, const int &j) const
 	{
@@ -149,34 +166,5 @@ public:
 
 int main()
 {
-	M(2, 2) = 4;
-	Matrix L(M);
-	Matrix U(M);
-	M(2, 2) = 5;
-	for (int i = 0; i < M.n; i++)
-	{
-		form sum = 0;
-		for (int k = abs(i - (M.k + 1)); k < i; k++)
-		{
-			sum += L(i, k)*U(k, i);
-		}
-		U(i, i) = M(i, i) - sum;
-		for (int j = i + 1; j < i + M.k&&j < M.n; j++)
-		{
-			sum = 0;
-			form sum2 = 0;
-			for (int k = i - M.k + 1; k < i; k++)
-			{
-				sum += L(i, k)*U(k, j);
-			}
-			U(i, j) = M(i, j) - sum;
 
-			sum = 0;
-			for (int k = i - M.k + 1; k < i; k++)
-			{
-				sum += L(j, k)*U(k, i);
-			}
-			L(j, i) = (M(j, i) - sum) / U(i, i);
-		}
-	}
 }
