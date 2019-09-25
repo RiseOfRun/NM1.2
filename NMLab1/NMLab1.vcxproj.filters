@@ -27,4 +27,18 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="fb.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="al.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="au.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="di.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+  </ItemGroup>
 </Project>
