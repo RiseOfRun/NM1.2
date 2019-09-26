@@ -23,21 +23,55 @@ public:
 
 	int n;
 	int m;
-	int k;
+	int p;
+
+	void Decompose()
+	{
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = i-p, jl=0; jl <= p; j++, jl++)
+			{
+				if (j < 0) continue;
+				double sumL = 0;
+				double sumU = 0;
+
+				for (int k = 0; k < jl; k++)
+				{
+					//sumL = L(i, k)*U(k, j);
+					sumL = al[i][k] * au[jl][k];
+					//sumU = L(j, k)*U(k, i);
+					sumU = al[jl][k] * au[i][k];
+				}
+
+				//U(j, i) = A(j, i) - sumU;
+				
+				if (i == j)
+				{
+					di[j] = di[j] - sumU;
+					break;
+				}
+				else
+				{
+					au[i][jl] = au[i][jl] - sumU;
+				}
+				//L(i, j) = (A(i, j) - sumL) / U(j, j);
+				al[i][jl] = (al[i][jl] - sumL) / di[j];
+			}
+		}
+	}
 
 	Matrix(Matrix *M)
 	{
-		this->k = M->k;
+		this->p = M->p;
 		this->n = M->n;
 		al = M->al;
 		m = M->m;
 		au = M->au;
 		di = M->di;
 	}
-
 	Matrix(std::ifstream &fl, std::ifstream &fu, std::ifstream &fd, int n, int k)
 	{
-		this->k = k;
+		this->p = k;
 		this->n = n;
 		m = 2 * k + 1;
 		al = new form*[n];
@@ -74,15 +108,15 @@ public:
 	form & operator ()(const int &i, const int &j)
 	{
 		bool contains = false; //проверить
-		if (abs(i - j) > k)
+		if (abs(i - j) > p)
 		{
 			form tmp = 0;
 			return tmp;
 		}
 
 		if (i == j) return di[i];
-		if (j < i) return al[i][k - (i - j)];
-		return au[j][k - (j - i)];
+		if (j < i) return al[i][p - (i - j)];
+		return au[j][p - (j - i)];
 	}
 
 	/*form operator ()(const int i, const int j) const
@@ -113,7 +147,7 @@ public:
 	{
 		for (int i = 0; i < A.n; i++)
 		{
-			for (int j = i - A.k; j <= i; j++)
+			for (int j = i - A.p; j <= i; j++)
 			{
 				if (j<0)
 				{
@@ -122,7 +156,7 @@ public:
 				double sumL = 0;
 				double sumU = 0;
 
-				for (int k = i-A.k; k < j; k++)
+				for (int k = i-A.p; k < j; k++)
 				{
 					if (k<0)
 					{
@@ -146,7 +180,7 @@ public:
 		for (int i = 0; i < A.n; i++)
 		{
 			double sum = 0;
-			for (int j = i-A.k; j<i; j++)
+			for (int j = i-A.p; j<i; j++)
 			{
 				if (j < 0)
 				{
@@ -164,7 +198,7 @@ public:
 		for (int i = A.n-1; i >=0 ; i--)
 		{
 			x[i] = y[i]/U(i,i);
-			for (int j =i-A.k; j<i; j++)
+			for (int j =i-A.p; j<i; j++)
 			{
 				if (j<0)
 				{
@@ -198,7 +232,7 @@ int main()
 	fb.open("fb.txt");
 
 	fb >> n >> k;
-
+	form **test = new form*[n];
 	Matrix A(al,au,di,n,k);
 	Matrix B(A);
 	form *b = new form[n];
@@ -207,10 +241,13 @@ int main()
 		fb >> b[i];
 	}
 
-	SLAE S(A,b);
-	S.Decompose();
-	S.findY();
-	S.findX();
-	int t = 0;
+	A.Decompose();
+
+
+	//SLAE S(A,b);
+	//S.Decompose();
+	//S.findY();
+	//S.findX();
+	//int t = 0;
 	
 }
