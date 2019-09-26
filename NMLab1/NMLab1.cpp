@@ -29,7 +29,7 @@ public:
 	{
 		for (int i = 0; i < n; i++)
 		{
-			for (int j = i-p, jl=0; jl <= p; j++, jl++)
+			for (int j = i-p, jl=0; jl <= p&&j<=i; j++, jl++)
 			{
 				if (j < 0) continue;
 				double sumL = 0;
@@ -38,9 +38,9 @@ public:
 				for (int k = 0; k < jl; k++)
 				{
 					//sumL = L(i, k)*U(k, j);
-					sumL = al[i][k] * au[jl][k];
+					sumL = al[i][k] * au[j][k];
 					//sumU = L(j, k)*U(k, i);
-					sumU = al[jl][k] * au[i][k];
+					sumU = al[j][k] * au[i][k];
 				}
 
 				//U(j, i) = A(j, i) - sumU;
@@ -92,7 +92,7 @@ public:
 		}
 	}
 
-	~Matrix()
+	/*~Matrix()
 	{
 		for (int i = 0; i < n; i++)
 		{
@@ -102,7 +102,7 @@ public:
 		delete di;
 		delete al;
 		delete au;
-	}
+	}*/
 
 
 	form & operator ()(const int &i, const int &j)
