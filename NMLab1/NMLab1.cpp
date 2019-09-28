@@ -35,12 +35,12 @@ public:
 				double sumL = 0;
 				double sumU = 0;
 
-				for (int k = 0; k < jl; k++)
+				for (int k = 0,ku=i-j; k < jl; k++, ku++)
 				{
 					//sumL = L(i, k)*U(k, j);
-					sumL = al[i][k] * au[j][k];
+					sumL += al[i][k] * au[j][ku];
 					//sumU = L(j, k)*U(k, i);
-					sumU = al[j][k] * au[i][k];
+					sumU += al[j][ku] * au[i][k];
 				}
 
 				//U(j, i) = A(j, i) - sumU;
@@ -56,6 +56,36 @@ public:
 				}
 				//L(i, j) = (A(i, j) - sumL) / U(j, j);
 				al[i][jl] = (al[i][jl] - sumL) / di[j];
+			}
+		}
+	}
+
+	void FindY(form *y)
+	{
+		form *b = y;
+		for (int i = 0; i < n; i++)
+		{
+			double sum = 0;
+			for (int j = i-p, jl=0; j < i; j++)
+			{
+				if (j < 0) continue;
+				//sum += L(i, j)*y[j];
+				sum += al[i][jl] * b[j];
+			}
+			y[i] = b[i] - sum;
+		}
+	}
+
+	void FindX(form *x)
+	{
+		form *y = x;
+		for (int i = n - 1; i >= 0; i--)
+		{
+			x[i] = y[i] / di[i];
+			for (int j = i - p, jl = 0; j < i; j++, jl++)
+			{
+				if (j < 0) continue;
+				y[j] -= x[i] * au[i][jl];
 			}
 		}
 	}
@@ -242,7 +272,7 @@ int main()
 	}
 
 	A.Decompose();
-
+	A.FindY(b);
 
 	//SLAE S(A,b);
 	//S.Decompose();
