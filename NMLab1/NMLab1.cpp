@@ -66,11 +66,11 @@ public:
 		for (int i = 0; i < n; i++)
 		{
 			double sum = 0;
-			for (int j = i-p, jl=0; j < i; j++)
+			for (int j = i-p, jl=0; j < i; j++, jl++)
 			{
 				if (j < 0) continue;
 				//sum += L(i, j)*y[j];
-				sum += al[i][jl] * b[j];
+				sum += al[i][jl] * y[j];
 			}
 			y[i] = b[i] - sum;
 		}
@@ -273,6 +273,7 @@ int main()
 
 	A.Decompose();
 	A.FindY(b);
+	A.FindX(b);
 
 	//SLAE S(A,b);
 	//S.Decompose();
