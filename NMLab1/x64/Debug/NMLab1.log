@@ -1,0 +1,9 @@
+﻿  NMLab1.cpp
+C:\Users\kamynin.2015\Desktop\NMLAb1\NMLab1\NMLab1.cpp(50,27): warning C4244: =: преобразование "double" в "form", возможна потеря данных
+C:\Users\kamynin.2015\Desktop\NMLAb1\NMLab1\NMLab1.cpp(52,36): warning C4244: =: преобразование "double" в "form", возможна потеря данных
+C:\Users\kamynin.2015\Desktop\NMLAb1\NMLab1\NMLab1.cpp(54,18): warning C4244: =: преобразование "double" в "form", возможна потеря данных
+C:\Users\kamynin.2015\Desktop\NMLAb1\NMLab1\NMLab1.cpp(71,16): warning C4244: =: преобразование "double" в "form", возможна потеря данных
+C:\Users\kamynin.2015\Desktop\NMLAb1\NMLab1\NMLab1.cpp(196,23): warning C4244: =: преобразование "double" в "form", возможна потеря данных
+C:\Users\kamynin.2015\Desktop\NMLAb1\NMLab1\NMLab1.cpp(199,32): warning C4244: =: преобразование "double" в "form", возможна потеря данных
+C:\Users\kamynin.2015\Desktop\NMLAb1\NMLab1\NMLab1.cpp(218,16): warning C4244: =: преобразование "double" в "form", возможна потеря данных
+  NMLab1.vcxproj -> C:\Users\kamynin.2015\Desktop\NMLAb1\x64\Debug\NMLab1.exe
