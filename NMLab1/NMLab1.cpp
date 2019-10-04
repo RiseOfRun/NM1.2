@@ -29,11 +29,13 @@ public:
 	{
 		for (int i = 0; i < n; i++)
 		{
-			for (int j = i-p, jl=0; jl <= p&&j<=i; j++, jl++)
+			double sumL;
+			double sumU;
+			for (int j = i-p, jl=0; j<=i; j++, jl++)
 			{
 				if (j < 0) continue;
-				double sumL = 0;
-				double sumU = 0;
+				sumL = 0;
+				sumU = 0;
 
 				for (int k = 0,ku=i-j; k < jl; k++, ku++)
 				{
@@ -45,18 +47,12 @@ public:
 
 				//U(j, i) = A(j, i) - sumU;
 				
-				if (i == j)
-				{
-					di[j] = di[j] - sumU;
-					break;
-				}
-				else
-				{
-					au[i][jl] = au[i][jl] - sumU;
-				}
+				au[i][jl] = au[i][jl] - sumU;
 				//L(i, j) = (A(i, j) - sumL) / U(j, j);
 				al[i][jl] = (al[i][jl] - sumL) / di[j];
 			}
+			di[i] = di[i] - sumU;
+
 		}
 	}
 
