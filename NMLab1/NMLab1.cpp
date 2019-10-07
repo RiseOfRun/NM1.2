@@ -8,6 +8,7 @@
 #include <iostream>
 
 typedef float form;
+typedef float form2;
 
 void Test(std::ifstream &fi)
 {
@@ -17,6 +18,7 @@ void Test(std::ifstream &fi)
 class Matrix
 {
 public:
+	Matrix *M = this;
 	form **al;
 	form **au;
 	form *di;
@@ -29,8 +31,8 @@ public:
 	{
 		for (int i = 0; i < n; i++)
 		{
-			double sumL;
-			double sumU;
+			form2 sumL;
+			form2 sumU;
 			for (int j = i-p, jl=0; j<=i; j++, jl++)
 			{
 				if (j < 0) continue;
@@ -39,6 +41,7 @@ public:
 
 				for (int k = 0,ku=i-j; k < jl; k++, ku++)
 				{
+					
 					//sumL = L(i, k)*U(k, j);
 					sumL += al[i][k] * au[j][ku];
 					//sumU = L(j, k)*U(k, i);
@@ -47,9 +50,13 @@ public:
 
 				//U(j, i) = A(j, i) - sumU;
 				
-				au[i][jl] = au[i][jl] - sumU;
-				//L(i, j) = (A(i, j) - sumL) / U(j, j);
-				al[i][jl] = (al[i][jl] - sumL) / di[j];
+					
+					//L(i, j) = (A(i, j) - sumL) / U(j, j);
+					if (i != j)
+					{
+						au[i][jl] = au[i][jl] - sumU;
+						al[i][jl] = (al[i][jl] - sumL) / di[j];
+					}
 			}
 			di[i] = di[i] - sumU;
 
@@ -61,7 +68,7 @@ public:
 		form *b = y;
 		for (int i = 0; i < n; i++)
 		{
-			double sum = 0;
+			form2 sum = 0;
 			for (int j = i-p, jl=0; j < i; j++, jl++)
 			{
 				if (j < 0) continue;
@@ -77,7 +84,12 @@ public:
 		form *y = x;
 		for (int i = n - 1; i >= 0; i--)
 		{
+			
 			x[i] = y[i] / di[i];
+			/*if (i==n-1)
+			{
+				x[i] = 10;
+			}*/
 			for (int j = i - p, jl = 0; j < i; j++, jl++)
 			{
 				if (j < 0) continue;
@@ -85,6 +97,26 @@ public:
 			}
 		}
 	}
+	/*form* Mult(const form* x, int n)
+	{
+		form* b = new form[n];
+		for (size_t i = 0; i < n; i++)
+		{
+			b[i] = 0;
+		}
+
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = i-p, jl =0; j <=i; j++,jl++)
+			{
+				if (j < 0) continue;
+				b[i] += al[i][jl] * x[j];
+				b[j] += au[i][jl] * x[i];
+			}
+		}
+
+		return b;
+	}*/
 
 	Matrix(Matrix *M)
 	{
@@ -95,6 +127,29 @@ public:
 		au = M->au;
 		di = M->di;
 	}
+	Matrix(Matrix* M,int n, int p)
+	{
+		this->p = p;
+		this->n = n;
+		m = 2 * p + 1;
+		al = new form * [n];
+		au = new form * [n];
+		di = new form[n];
+
+		for (int i = 0; i < n; i++)
+		{
+			al[i] = new form[p];
+			au[i] = new form[p];
+
+			for (int j = 0; j < p; j++)
+			{
+				al[i][j]=M->al[i][j];
+				au[i][j]=M->au[i][j];
+			}
+			di[i] = M->di[i];
+		}
+	}
+
 	Matrix(std::ifstream &fl, std::ifstream &fu, std::ifstream &fd, int n, int k)
 	{
 		this->p = k;
@@ -118,17 +173,17 @@ public:
 		}
 	}
 
-	/*~Matrix()
+	~Matrix()
 	{
-		for (int i = 0; i < n; i++)
-		{
-			delete al[i];
-			delete au[i];
+		for (int i = 0; i < n; i++) {
+			delete[]al[i];
+			delete[]au[i];
 		}
-		delete di;
-		delete al;
-		delete au;
-	}*/
+
+		delete[]al;
+		delete[]au;
+		delete[]di;
+	}
 
 
 	form & operator ()(const int &i, const int &j)
@@ -149,132 +204,166 @@ public:
 	{
 		return 0;
 	}*/
-};
-
-class SLAE
-{
-public:
-	Matrix A;
-	Matrix L;
-	Matrix U;
-
-	form *b;
-	form *x;
-	form *y;
-
-	SLAE(Matrix& M, form *b):A(M), L(A), U(A)
-	{
-		this->b = b;
-		x = b;
-		y = b;
-	}
-
-	void Decompose()
-	{
-		for (int i = 0; i < A.n; i++)
-		{
-			for (int j = i - A.p; j <= i; j++)
-			{
-				if (j<0)
-				{
-					j = 0;
-				}
-				double sumL = 0;
-				double sumU = 0;
-
-				for (int k = i-A.p; k < j; k++)
-				{
-					if (k<0)
-					{
-						k = -1;
-						continue;
-					}
-					sumL = L(i, k)*U(k, j);
-					sumU = L(j, k)*U(k, i);
-				}
-
-				U(j, i) = A(j, i) - sumU;
-				
-				if (i == j) break;
-				L(i, j) = (A(i, j) - sumL) / U(j, j);
-			}
-		}
-	}
-
-	void findY()
-	{
-		for (int i = 0; i < A.n; i++)
-		{
-			double sum = 0;
-			for (int j = i-A.p; j<i; j++)
-			{
-				if (j < 0)
-				{
-					j = -1;
-					continue;
-				}
-				sum += L(i, j)*y[j];
-			}
-			y[i] = b[i] - sum;
-		}
-	}
-
-	void findX()
-	{
-		for (int i = A.n-1; i >=0 ; i--)
-		{
-			x[i] = y[i]/U(i,i);
-			for (int j =i-A.p; j<i; j++)
-			{
-				if (j<0)
-				{
-					j = -1;
-					continue;
-				}
-				y[j]-=x[i]*U(j,i);
-			}
-		}
-	}
 
 };
+
+
+//class SLAE
+//{
+//public:
+//	Matrix A;
+//	Matrix L;
+//	Matrix U;
+//
+//	form *b;
+//	form *x;
+//	form *y;
+//
+//	SLAE(Matrix& M, form *b):A(M), L(A), U(A)
+//	{
+//		this->b = b;
+//		x = b;
+//		y = b;
+//	}
+//
+//	void Decompose()
+//	{
+//		for (int i = 0; i < A.n; i++)
+//		{
+//			for (int j = i - A.p; j <= i; j++)
+//			{
+//				if (j<0)
+//				{
+//					j = 0;
+//				}
+//				double sumL = 0;
+//				double sumU = 0;
+//
+//				for (int k = i-A.p; k < j; k++)
+//				{
+//					if (k<0)
+//					{
+//						k = -1;
+//						continue;
+//					}
+//					sumL = L(i, k)*U(k, j);
+//					sumU = L(j, k)*U(k, i);
+//				}
+//
+//				U(j, i) = A(j, i) - sumU;
+//				
+//				if (i == j) break;
+//				L(i, j) = (A(i, j) - sumL) / U(j, j);
+//			}
+//		}
+//	}
+//
+//	void findY()
+//	{
+//		for (int i = 0; i < A.n; i++)
+//		{
+//			double sum = 0;
+//			for (int j = i-A.p; j<i; j++)
+//			{
+//				if (j < 0)
+//				{
+//					j = -1;
+//					continue;
+//				}
+//				sum += L(i, j)*y[j];
+//			}
+//			y[i] = b[i] - sum;
+//		}
+//	}
+//
+//	void findX()
+//	{
+//		for (int i = A.n-1; i >=0 ; i--)
+//		{
+//			x[i] = y[i]/U(i,i);
+//			for (int j =i-A.p; j<i; j++)
+//			{
+//				if (j<0)
+//				{
+//					j = -1;
+//					continue;
+//				}
+//				y[j]-=x[i]*U(j,i);
+//			}
+//		}
+//	}
+//
+//};
 
 
 
 
 int main()
 {
-	int n, k;
+	int n, p;
 	std::ifstream al;
 	std::ifstream au;
 	std::ifstream di;
 	std::ifstream fb;
 	std::ofstream tmp;
 	tmp.open("out.txt");
-
-
 	au.open("au.txt");
 	al.open("al.txt");
 	di.open("di.txt");
 	fb.open("fb.txt");
 
-	fb >> n >> k;
-	form **test = new form*[n];
-	Matrix A(al,au,di,n,k);
-	Matrix B(A);
-	form *b = new form[n];
+	fb >> n >> p;
+	
+
+	Matrix A(al, au, di, n, p);
+	form *x = new form[n];
+	form* f = new form[n];
 	for (size_t i = 0; i < n; i++)
 	{
-		fb >> b[i];
+		fb >> f[i];
+		x[i] = i + 1;
 	}
+	/*A.Decompose();
+	for (size_t i = 0; i < n; i++)
+	{
+		for (size_t j = 0; j < n; j++)
+		{
+			std::cout << A(i, j) << " ";
+		}
+		std::cout << "\n";
+	}
+	A.FindY(f);
+	A.FindX(f);*/
+	form* xk = new form[n];
 
-	A.Decompose();
-	A.FindY(b);
-	A.FindX(b);
+	double multiplex = 1;
+	for (int k = 0; k <=15; k++)
+	{
+		Matrix Ak(&A, n, p);
+		for (size_t i = 0; i < n; i++)
+		{
+			xk[i] = f[i];
+		}
 
-	//SLAE S(A,b);
-	//S.Decompose();
-	//S.findY();
-	//S.findX();
-	//int t = 0;
+		Ak(0, 0) += multiplex;
+		for (size_t i = 0; i < n; i++)
+		{
+			xk[i] = f[i];
+		}
+		xk[0] += multiplex;
+		Ak.Decompose();
+		Ak.FindY(xk);
+		Ak.FindX(xk);
+		for (size_t i = 0; i < n; i++)
+		{
+			tmp << xk[i] << " " << x[i] - xk[i] << "\n";
+		}
+		multiplex /= 10;
+	}
+	/*SLAE S(A,b);
+	S.Decompose();
+	S.findY();
+	S.findX();
+	int t = 0;*/
 	
 }

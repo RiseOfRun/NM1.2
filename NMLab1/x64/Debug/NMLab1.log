@@ -1,9 +1,6 @@
 ﻿  NMLab1.cpp
-C:\Users\kamynin.2015\Desktop\NMLAb1\NMLab1\NMLab1.cpp(50,27): warning C4244: =: преобразование "double" в "form", возможна потеря данных
-C:\Users\kamynin.2015\Desktop\NMLAb1\NMLab1\NMLab1.cpp(52,36): warning C4244: =: преобразование "double" в "form", возможна потеря данных
-C:\Users\kamynin.2015\Desktop\NMLAb1\NMLab1\NMLab1.cpp(54,18): warning C4244: =: преобразование "double" в "form", возможна потеря данных
-C:\Users\kamynin.2015\Desktop\NMLAb1\NMLab1\NMLab1.cpp(71,16): warning C4244: =: преобразование "double" в "form", возможна потеря данных
-C:\Users\kamynin.2015\Desktop\NMLAb1\NMLab1\NMLab1.cpp(196,23): warning C4244: =: преобразование "double" в "form", возможна потеря данных
-C:\Users\kamynin.2015\Desktop\NMLAb1\NMLab1\NMLab1.cpp(199,32): warning C4244: =: преобразование "double" в "form", возможна потеря данных
-C:\Users\kamynin.2015\Desktop\NMLAb1\NMLab1\NMLab1.cpp(218,16): warning C4244: =: преобразование "double" в "form", возможна потеря данных
-  NMLab1.vcxproj -> C:\Users\kamynin.2015\Desktop\NMLAb1\x64\Debug\NMLab1.exe
+e:\projects\nm1.3\nmlab1\nmlab1.cpp(324): warning C4244: =: преобразование "size_t" в "form", возможна потеря данных
+e:\projects\nm1.3\nmlab1\nmlab1.cpp(348): warning C4244: +=: преобразование "double" в "form", возможна потеря данных
+e:\projects\nm1.3\nmlab1\nmlab1.cpp(353): warning C4244: +=: преобразование "double" в "form", возможна потеря данных
+e:\projects\nm1.3\nmlab1\nmlab1.cpp(195): warning C4172: возвращение адреса локальной или временной переменной : tmp
+  NMLab1.vcxproj -> E:\projects\NM1.3\x64\Debug\NMLab1.exe
