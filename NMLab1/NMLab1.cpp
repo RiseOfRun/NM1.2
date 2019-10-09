@@ -116,7 +116,7 @@ public:
 	Matrix(int n)
 	{
 		this->n = n;
-		p = n / 2;
+		p = n-1;
 		m = 2 * p + 1;
 		al = new form * [n];
 		au = new form * [n];
@@ -229,12 +229,13 @@ public:
 
 void Hilbert(Matrix &A, form* b)
 {
+	const double c1 = 1;
 	for (int i = 0; i < A.n; i++)
 	{
 		for (int j = 0; j <=i; j++)
 		{
-			A(i, j) = 1.0 / (i + j + 1);
-			A(j, i) = 1.0 / (i + j + 1);
+			A(i, j) = c1 / (i + j + c1);
+			A(j, i) = c1 / (i + j + c1);
 		}
 	}
 
@@ -243,15 +244,94 @@ void Hilbert(Matrix &A, form* b)
 		double sum = 0;
 		for (size_t j = 0; j < A.n; j++)
 		{
-			sum += A(i, j) * (j + 1);
+			sum += A(i, j) * (j + c1);
 		}
 		b[i] = sum;
 	}
 }
 
-void Gauss(form **A, form*b)
+form** ForGauss( form* b, int n, int m)
 {
+	form **A = new form*[n];
 
+	for (int i = 0; i < n; i++)
+	{
+		A[i] = new form[m];
+		for (int j = 0; j < m; j++)
+		{
+			A[i][j] = 1.0 / (i + j + 1);
+		}
+	}
+
+	for (int i = 0; i < n; i++)
+	{
+		double sum = 0;
+		for (size_t j = 0; j < n; j++)
+		{
+			sum += A[i][j] * (j + 1);
+		}
+		b[i] = sum;
+	}
+	return A;
+}
+
+void Gauss(form **A, form*b, int n, int m)
+{
+	for (size_t i = 0; i < n; i++)
+	{
+		form max = A[i][i];
+		int l = i;
+		for (int j = i; j < n; j++)
+		{
+			if (A[j][i] > max)
+			{
+				l = j;
+				max = A[j][i];
+			}
+		}
+		form *tmp = A[i];
+		std::swap(A[i], A[l]);
+		std::swap(b[i], b[l]);
+
+		for (size_t j = i+1; j < n; j++)
+		{
+			form mult =A[j][i] / A[i][i];
+			for (size_t k = i; k < n; k++)
+			{
+				if (k == i)
+				{
+					A[j][k] = 0;
+				}
+				else A[j][k] = mult*A[i][k];
+			}
+			b[j] -= b[i]*mult;
+		}
+	}
+
+	for (size_t i = 0; i < n; i++)
+	{
+		for (size_t j = 0; j < n; j++)
+		{
+			std::cout << A[i][j] << " ";
+		}
+		std::cout << "| " << b[i] <<'\n';
+	}
+
+	form *x = b;
+	for (int i = n - 1; i >= 0; i--)
+	{
+
+		x[i] = b[i] / A[i][i];
+		/*if (i==n-1)
+		{
+			x[i] = 10;
+		}*/
+		for (int j = 0; j < i; j++)
+		{
+			if (j < 0) continue;
+			b[j] -= x[i] * A[i][j];
+		}
+	}
 }
 //class SLAE
 //{
@@ -357,10 +437,17 @@ int main()
 	di.open("di.txt");
 	fb.open("fb.txt");
 
-	//Hilbert Part
-	form* b = new form[20];
+
+	/*Matrix A = new Matrix(3);
+	form *b = new form[3];
+	Hilbert(A, b);*/
+
+
+	////Hilbert Part
+	form *b = new form[20];
 	for (int k = 1; k < 20; k++)
 	{
+		
 		Matrix A(k);
 		Hilbert(A, b);
 		A.Decompose();
@@ -370,35 +457,26 @@ int main()
 		{
 			tmp << b[i]<<" "<< i+1 - b[i] << "\n";
 		}
+
+		tmp << "\n\n";
 	}
-	//----
+	////----
 
 
 	//fb >> n >> p;
 	//
 
-	//Matrix A(al, au, di, n, p);
-	//form *x = new form[n];
-	//form* f = new form[n];
-	//for (size_t i = 0; i < n; i++)
-	//{
-	//	fb >> f[i];
-	//	x[i] = i + 1;
-	//}
-	///*A.Decompose();
-	//for (size_t i = 0; i < n; i++)
-	//{
-	//	for (size_t j = 0; j < n; j++)
-	//	{
-	//		std::cout << A(i, j) << " ";
-	//	}
-	//	std::cout << "\n";
-	//}
-	//A.FindY(f);
-	//A.FindX(f);*/
-	//form* xk = new form[n];
+	/*Matrix A(al, au, di, n, p);
+	form *x = new form[n];
+	form* f = new form[n];
+	for (size_t i = 0; i < n; i++)
+	{
+		fb >> f[i];
+		x[i] = i + 1;
+	}
+	form* xk = new form[n];
 
-	/*double multiplex = 1;
+	double multiplex = 1;
 	for (int k = 0; k <=15; k++)
 	{
 		Matrix Ak(&A, n, p);
@@ -422,4 +500,10 @@ int main()
 		}
 		multiplex /= 10;
 	}*/
+
+	//Gauss Part
+	//form *b = new form[2];
+	//form **A = ForGauss(b,2,2);
+	//Gauss(A, b, 2, 2);
+	//-------------
 }
