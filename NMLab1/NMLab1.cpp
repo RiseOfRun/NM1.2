@@ -10,11 +10,6 @@
 typedef float form;
 typedef float form2;
 
-void Test(std::ifstream &fi)
-{
-
-}
-
 class Matrix
 {
 public:
@@ -118,6 +113,29 @@ public:
 		return b;
 	}*/
 
+	Matrix(int n)
+	{
+		this->n = n;
+		p = n / 2;
+		m = 2 * p + 1;
+		al = new form * [n];
+		au = new form * [n];
+		di = new form[n];
+
+		for (int i = 0; i < n; i++)
+		{
+			al[i] = new form[p];
+			au[i] = new form[p];
+
+			for (int j = 0; j < p; j++)
+			{
+				al[i][j]=0;
+				au[i][j]=0;
+			}
+			di[i]=0;
+		}
+
+	}
 	Matrix(Matrix *M)
 	{
 		this->p = M->p;
@@ -173,6 +191,7 @@ public:
 		}
 	}
 
+
 	~Matrix()
 	{
 		for (int i = 0; i < n; i++) {
@@ -184,6 +203,7 @@ public:
 		delete[]au;
 		delete[]di;
 	}
+
 
 
 	form & operator ()(const int &i, const int &j)
@@ -207,7 +227,32 @@ public:
 
 };
 
+void Hilbert(Matrix &A, form* b)
+{
+	for (int i = 0; i < A.n; i++)
+	{
+		for (int j = 0; j <=i; j++)
+		{
+			A(i, j) = 1.0 / (i + j + 1);
+			A(j, i) = 1.0 / (i + j + 1);
+		}
+	}
 
+	for (int i = 0; i < A.n; i++)
+	{
+		double sum = 0;
+		for (size_t j = 0; j < A.n; j++)
+		{
+			sum += A(i, j) * (j + 1);
+		}
+		b[i] = sum;
+	}
+}
+
+void Gauss(form **A, form*b)
+{
+
+}
 //class SLAE
 //{
 //public:
@@ -312,31 +357,48 @@ int main()
 	di.open("di.txt");
 	fb.open("fb.txt");
 
-	fb >> n >> p;
-	
-
-	Matrix A(al, au, di, n, p);
-	form *x = new form[n];
-	form* f = new form[n];
-	for (size_t i = 0; i < n; i++)
+	//Hilbert Part
+	form* b = new form[20];
+	for (int k = 1; k < 20; k++)
 	{
-		fb >> f[i];
-		x[i] = i + 1;
-	}
-	/*A.Decompose();
-	for (size_t i = 0; i < n; i++)
-	{
-		for (size_t j = 0; j < n; j++)
+		Matrix A(k);
+		Hilbert(A, b);
+		A.Decompose();
+		A.FindY(b);
+		A.FindX(b);
+		for (size_t i = 0; i < k; i++)
 		{
-			std::cout << A(i, j) << " ";
+			tmp << b[i]<<" "<< i+1 - b[i] << "\n";
 		}
-		std::cout << "\n";
 	}
-	A.FindY(f);
-	A.FindX(f);*/
-	form* xk = new form[n];
+	//----
 
-	double multiplex = 1;
+
+	//fb >> n >> p;
+	//
+
+	//Matrix A(al, au, di, n, p);
+	//form *x = new form[n];
+	//form* f = new form[n];
+	//for (size_t i = 0; i < n; i++)
+	//{
+	//	fb >> f[i];
+	//	x[i] = i + 1;
+	//}
+	///*A.Decompose();
+	//for (size_t i = 0; i < n; i++)
+	//{
+	//	for (size_t j = 0; j < n; j++)
+	//	{
+	//		std::cout << A(i, j) << " ";
+	//	}
+	//	std::cout << "\n";
+	//}
+	//A.FindY(f);
+	//A.FindX(f);*/
+	//form* xk = new form[n];
+
+	/*double multiplex = 1;
 	for (int k = 0; k <=15; k++)
 	{
 		Matrix Ak(&A, n, p);
@@ -359,11 +421,5 @@ int main()
 			tmp << xk[i] << " " << x[i] - xk[i] << "\n";
 		}
 		multiplex /= 10;
-	}
-	/*SLAE S(A,b);
-	S.Decompose();
-	S.findY();
-	S.findX();
-	int t = 0;*/
-	
+	}*/
 }

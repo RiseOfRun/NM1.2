@@ -1,6 +1,9 @@
 ﻿  NMLab1.cpp
-e:\projects\nm1.3\nmlab1\nmlab1.cpp(324): warning C4244: =: преобразование "size_t" в "form", возможна потеря данных
-e:\projects\nm1.3\nmlab1\nmlab1.cpp(348): warning C4244: +=: преобразование "double" в "form", возможна потеря данных
-e:\projects\nm1.3\nmlab1\nmlab1.cpp(353): warning C4244: +=: преобразование "double" в "form", возможна потеря данных
-e:\projects\nm1.3\nmlab1\nmlab1.cpp(195): warning C4172: возвращение адреса локальной или временной переменной : tmp
+e:\projects\nm1.3\nmlab1\nmlab1.cpp(236): warning C4244: =: преобразование "double" в "form", возможна потеря данных
+e:\projects\nm1.3\nmlab1\nmlab1.cpp(237): warning C4244: =: преобразование "double" в "form", возможна потеря данных
+e:\projects\nm1.3\nmlab1\nmlab1.cpp(246): warning C4267: аргумент: преобразование из "size_t" в "const int"; возможна потеря данных
+e:\projects\nm1.3\nmlab1\nmlab1.cpp(248): warning C4244: =: преобразование "double" в "form", возможна потеря данных
+e:\projects\nm1.3\nmlab1\nmlab1.cpp(343): warning C4101: p: неиспользованная локальная переменная
+e:\projects\nm1.3\nmlab1\nmlab1.cpp(343): warning C4101: n: неиспользованная локальная переменная
+e:\projects\nm1.3\nmlab1\nmlab1.cpp(215): warning C4172: возвращение адреса локальной или временной переменной : tmp
   NMLab1.vcxproj -> E:\projects\NM1.3\x64\Debug\NMLab1.exe
