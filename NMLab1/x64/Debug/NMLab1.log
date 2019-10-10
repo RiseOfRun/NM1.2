@@ -1,13 +1,8 @@
 ﻿  NMLab1.cpp
-z:\nmlab\nmlab1\nmlab1.cpp(237): warning C4244: =: преобразование "double" в "form", возможна потеря данных
-z:\nmlab\nmlab1\nmlab1.cpp(238): warning C4244: =: преобразование "double" в "form", возможна потеря данных
-z:\nmlab\nmlab1\nmlab1.cpp(247): warning C4267: аргумент: преобразование из "size_t" в "const int"; возможна потеря данных
-z:\nmlab\nmlab1\nmlab1.cpp(249): warning C4244: =: преобразование "double" в "form", возможна потеря данных
-z:\nmlab\nmlab1\nmlab1.cpp(262): warning C4244: =: преобразование "double" в "form", возможна потеря данных
-z:\nmlab\nmlab1\nmlab1.cpp(273): warning C4244: =: преобразование "double" в "form", возможна потеря данных
-z:\nmlab\nmlab1\nmlab1.cpp(283): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-z:\nmlab\nmlab1\nmlab1.cpp(284): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-z:\nmlab\nmlab1\nmlab1.cpp(428): warning C4101: p: неиспользованная локальная переменная
-z:\nmlab\nmlab1\nmlab1.cpp(428): warning C4101: n: неиспользованная локальная переменная
-z:\nmlab\nmlab1\nmlab1.cpp(215): warning C4172: возвращение адреса локальной или временной переменной : tmp
-  NMLab1.vcxproj -> Z:\NMLAB\x64\Debug\NMLab1.exe
+E:\projects\NM1.3\NMLab1\NMLab1.cpp(248,17): warning C4267: аргумент: преобразование из "size_t" в "const int"; возможна потеря данных
+E:\projects\NM1.3\NMLab1\NMLab1.cpp(284,12): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+E:\projects\NM1.3\NMLab1\NMLab1.cpp(285,17): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+E:\projects\NM1.3\NMLab1\NMLab1.cpp(430,9): warning C4101: p: неиспользованная локальная переменная
+E:\projects\NM1.3\NMLab1\NMLab1.cpp(430,6): warning C4101: n: неиспользованная локальная переменная
+E:\projects\NM1.3\NMLab1\NMLab1.cpp(216): warning C4172: возвращение адреса локальной или временной переменной : tmp
+  NMLab1.vcxproj -> E:\projects\NM1.3\x64\Debug\NMLab1.exe

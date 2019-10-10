@@ -5,10 +5,11 @@
 #include <math.h>
 #include <cstdio>
 #include <fstream>
-#include <iostream>
+#include <iostream>	
+#include <iomanip>
 
-typedef float form;
-typedef float form2;
+typedef double form;
+typedef double form2;
 
 class Matrix
 {
@@ -302,7 +303,7 @@ void Gauss(form **A, form*b, int n, int m)
 				{
 					A[j][k] = 0;
 				}
-				else A[j][k] = mult*A[i][k];
+				else A[j][k] -= mult*A[i][k];
 			}
 			b[j] -= b[i]*mult;
 		}
@@ -329,7 +330,7 @@ void Gauss(form **A, form*b, int n, int m)
 		for (int j = 0; j < i; j++)
 		{
 			if (j < 0) continue;
-			b[j] -= x[i] * A[i][j];
+			b[j] -= x[i] * A[j][i];
 		}
 	}
 }
@@ -425,6 +426,7 @@ void Gauss(form **A, form*b, int n, int m)
 
 int main()
 {
+	
 	int n, p;
 	std::ifstream al;
 	std::ifstream au;
@@ -436,6 +438,7 @@ int main()
 	al.open("al.txt");
 	di.open("di.txt");
 	fb.open("fb.txt");
+	setlocale(LC_NUMERIC, "RUS");
 
 
 	/*Matrix A = new Matrix(3);
@@ -443,30 +446,30 @@ int main()
 	Hilbert(A, b);*/
 
 
-	////Hilbert Part
-	form *b = new form[20];
-	for (int k = 1; k < 20; k++)
-	{
-		
-		Matrix A(k);
-		Hilbert(A, b);
-		A.Decompose();
-		A.FindY(b);
-		A.FindX(b);
-		for (size_t i = 0; i < k; i++)
-		{
-			tmp << b[i]<<" "<< i+1 - b[i] << "\n";
-		}
+	///*Hilbert Part*/
+	//form *b = new form[20];
+	//for (int k = 1; k < 13; k++)
+	//{
 
-		tmp << "\n\n";
-	}
+	//	Matrix A(k);
+	//	Hilbert(A, b);
+	//	A.Decompose();
+	//	A.FindY(b);
+	//	A.FindX(b);
+	//	for (size_t i = 0; i < k; i++)
+	//	{
+	//		tmp << std::setprecision(7);
+	//		tmp << b[i] << " " << i + 1 - b[i] << "\n";
+	//	}
+
+	//}
 	////----
 
 
-	//fb >> n >> p;
-	//
+	/*fb >> n >> p;
+	
 
-	/*Matrix A(al, au, di, n, p);
+	Matrix A(al, au, di, n, p);
 	form *x = new form[n];
 	form* f = new form[n];
 	for (size_t i = 0; i < n; i++)
@@ -496,14 +499,33 @@ int main()
 		Ak.FindX(xk);
 		for (size_t i = 0; i < n; i++)
 		{
+			tmp << std::setprecision(15);
 			tmp << xk[i] << " " << x[i] - xk[i] << "\n";
 		}
 		multiplex /= 10;
 	}*/
 
-	//Gauss Part
-	//form *b = new form[2];
-	//form **A = ForGauss(b,2,2);
-	//Gauss(A, b, 2, 2);
-	//-------------
+	/*Gauss Part*/
+	form* bg = new form[20];
+	form* b = new form[20];
+	for (int k = 1; k < 14; k++)
+	{
+		
+		form** Ag = ForGauss(bg, k, k);
+		Gauss(Ag, bg, k, k);
+		Matrix A(k);
+
+		Hilbert(A, b);
+		A.Decompose();
+		A.FindY(b);
+		A.FindX(b);
+		for (size_t i = 0; i < k; i++)
+		{
+			tmp << std::setprecision(15);
+			tmp << k<<" "<<  b[i] << " " << i + 1 - b[i] <<" " <<bg[i] << " " << i + 1-bg[i] << "\n";
+		}
+
+	}
+	
+	/*-------------*/
 }
